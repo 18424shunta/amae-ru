@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>タイトル</title>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <!-- fullcalendar -->
+  <script src='fullcalendar/lib/main.min.js'></script>
+  <script src='fullcalendar/lib/locales-all.js'></script>
+  <link href='fullcalendar/lib/main.min.css' rel='stylesheet' />
+</head>
+
+<body>
+  <div id="calendar"></div>
+  期間開始<input id="start_date" type="text"></input>
+  <!-- <br> -->
+  期間終了<input id="end_date" type="text"></input>
+
+
+  <script>
+    $(document).ready(function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        selectable: true,
+        aspectRatio: 1,
+        locale: "ja",
+        dateClick: function(date) { // ユーザが日付をクリックしたときの処理
+          /*
+          console.log("dateClick callback");
+          console.log(date);
+          */
+          // selected_date = date.format();
+          // updateChart(fish_catch_count_chart); 
+          // // 受け取った日付を表示するとこ
+          // console.log(date.format());
+        },
+        select: function(date) { // ユーザが日付を選択したときの処理
+          console.log("select callback");
+          console.log(date);
+
+          // テキストボックスの初期化
+          $("#start_date").val();
+          $("#end_date").val();
+
+          // 取得した日は1日分多いので期間最終日を一日引く
+          var _e_date = date.end.setDate(date.end.getDate() - 1);
+          var end_date = formattedDate(_e_date);
+        
+          // 選択した期間をテキストボックスに設置
+          $("#start_date").val(date.startStr);
+          $("#end_date").val(end_date);
+
+        }
+      });
+      calendar.render();
+    });
+
+
+
+    /* -------------------------------
+     * 時間の書式を整える処理
+     * -------------------------------*/
+    function formattedDate(unixtime) {
+      var _date = new Date(unixtime);
+
+      var y = _date.getFullYear();
+      var m = _date.getMonth()+1;
+      var d = _date.getDate();
+
+      m = ("00" + m).slice(-2); // 桁のゼロ埋め
+      d = ("00" + d).slice(-2);
+
+      return y + "-" + m + "-" + d;
+    }
+  </script>
+</body>
+
+</html>
